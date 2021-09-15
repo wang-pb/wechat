@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="../css/layui.css" rel="stylesheet" />
+    <style>
+        body { margin: 0 auto; padding: 0; background-image: url(/Content/images/loginbg1.jpg); background-position: bottom right; background-repeat: no-repeat; background-attachment: fixed; background-size: cover; }
+        .form { width: 460px; height: 360px; left: 50%; top: 50%; background-color: rgba(255,255,255,0.6); position: fixed; margin-top: -200px; margin-left: -310px; padding: 20px 50px; box-shadow: 0 0 10px #fff; }
+        .formtitle { width: 100%; height: 50px; line-height: 50px; border-bottom: solid 1px #cacacc; text-align: center; letter-spacing: 2px; vertical-align: middle; font-size: 22px; color: #5c5c5f; margin-bottom: 20px; }
+        .tb { width: 38px; height: 38px; background-color: #cacacc; float: left; }
+            .tb img { width: 38px; height: 38px; }
+        .layui-input-block { margin-left: 38px; }
+        .layui-form-item .layui-inline { margin-right: 0px; }
+    </style>
+</head>
+<body>
+    <div class="form">
+        <div class="formtitle">
+            盐池县医联体云平台
+        </div>
+        <form class="layui-form" style="width:350px; float:left; margin-left:65px; ">
+            <div class="layui-form-item">
+                <div class="tb"><img src="~/Content/images/yhm.png" /></div>
+                <div class="layui-input-block">
+                    
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top:10px;">
+                <div class="tb"><img src="~/Content/images/pwd.png" /></div>
+                <div class="layui-input-block">
+                    
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top:10px;">
+                <div class="layui-inline">
+                    <div class="tb"><img src="~/Content/images/yzm.png" /></div>
+                    <div class="layui-input-block" style="width:215px;">
+                        
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <img src="/Login/GetAdminLoginVerificationCode?ID=1" height="38" width="90" id="yzm" style="cursor:pointer;" />
+                </div>
+            </div>
+            <div class="layui-form-item" style="border:solid 1px #a8a8ad; padding:5px;  color:#fff; border-radius:4px; margin-top:-8px; color:#a8a8ad;">若验证码不清晰，可点击验证码图片更换验证码</div>
+            <div class="layui-form-item" style="margin-top:10px;">
+                <button class="layui-btn" style="width:150px;" lay-submit lay-filter="login">登录</button>
+                <button type="reset" class="layui-btn layui-btn-primary" style="width:150px;">重置</button>
+            </div>
+
+        </form>
+    </div>
+    <script src="../layui.js"></script>
+    <script>
+        layui.use(['layer', 'form', 'jquery'], function () {
+            var layer = layui.layer,
+             $ = layui.jquery,
+             form = layui.form;
+            $("#yzm").click(function () {
+                var src = $(this).attr("src") + 1;
+                $(this).attr("src", src)
+            });
+            form.on('submit(login)', function (data) {
+                $.post('@Url.Action("LoginIn", "Login")', data.field, function (status) {
+                    if (status.Code == "0") {
+                        if (status.Explain == "1") {
+                            window.location.href = "/superadmin/Base/index"
+                        } else {
+                            window.location.href = "/unit/Base/index"
+                        }
+                    } else {
+                        var src = $("#yzm").attr("src") + 1;
+                        $("#yzm").attr("src", src);
+                        if (status.Code == 2) {
+                            layer.tips(status.Explain, '#VerificationCode', { tips: [1, '#3595CC'], time: 2000 });
+                        } else {
+                            layer.tips(status.Explain, '#AdminName', { tips: [1, '#3595CC'], time: 2000 });
+                        }
+                    }
+                }, 'json');
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+        });
+    </script>
+</body>
+</html>

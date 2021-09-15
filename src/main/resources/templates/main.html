@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>table模块快速使用</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.8/css/layui.css">
+    <style>
+        .layui-tab
+    </style>
+</head>
+<body>
+
+<table id="demo" lay-filter="test"></table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.8/layui.js"></script>
+<script>
+
+    // test_request = new XMLHttpRequest();
+    // test_request.open("POST","/admin/login",)
+
+    var testjk = $.ajax("/admin/login",{
+        method:"POST",
+        data:{
+            "userName":"aaa",
+            "password":"aaa"
+        },
+        dataType:"json"
+        }
+    ).done(
+        function (data)
+    )
+
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 312
+            //,url: '/public_display/get_carousel' //数据接口
+            ,parseData: function(res){
+                return {
+                    "code":res.state,
+                    "msg":res.msg,
+                    "data":res.data
+                }
+            }
+            ,page: false //开启分页
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+                ,{field: 'sequence', title: '顺序'}
+                ,{field: 'url', title: 'url', sort: false, templet:'<div><img src="{{d.url}}"></div>'}
+
+            ]]
+        });
+
+    });
+</script>
+</body>
+</html>
