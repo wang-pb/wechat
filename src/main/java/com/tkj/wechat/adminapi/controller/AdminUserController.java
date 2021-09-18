@@ -10,9 +10,11 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +28,9 @@ public class AdminUserController {
     private AdminUserService adminUserService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
+    @Autowired
+    private HttpSession httpSession;
 
     @Value("${custom.jwt.expire_time}")
     private long expireTime;
@@ -42,11 +46,12 @@ public class AdminUserController {
         if(null == administrator){
             return ApiReturnUtil.wrongPassword();
         }
+        httpSession.setAttribute("pass", password);
         //String token = adminUserService.generateToken(administrator.getId());
         Map<Object,Object> data = new HashMap<>();
         data.put(StatusCode.LOGIN_TOKEN_KEY,token);
         //redisTemplate.opsForValue().set(token,token, expireTime*2/100, TimeUnit.SECONDS);
-        return ApiReturnUtil.ok("success");
+        return ApiReturnUtil.ok(data);
     }
 
 }
