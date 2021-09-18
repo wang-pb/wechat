@@ -47,6 +47,7 @@
             url:'/public_display/get_carousel?type=1',//type=1表示教师海报
             method: 'get',
             dataType: 'json',
+            headers: {token: localStorage.getItem('token')},
             success: function (resp) {
                 carouselList = resp.data
                 table.render({
@@ -186,6 +187,7 @@
                 url:'/public_display/get_carousel',
                 method: 'get',
                 dataType: 'json',
+                headers: {token: localStorage.getItem('token')},
                 success: function (resp) {
                     carouselList = resp.data
                     table.reload('currentTableId', {data: carouselList});

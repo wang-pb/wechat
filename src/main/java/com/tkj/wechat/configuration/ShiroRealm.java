@@ -12,8 +12,10 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
@@ -27,7 +29,9 @@ import java.util.concurrent.TimeUnit;
 public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate redisTemplate;
+    @Autowired
+    private HttpSession httpSession;
 
     /**
      * redis过期时间设置
@@ -94,7 +98,8 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new AuthenticationException("token无效");
         }
         // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, "123")) {
+        String pass = (String) httpSession.getAttribute("pass");
+        if (!jwtTokenRefresh(token, username, pass)) {
             throw new AuthenticationException("Token失效，请重新登录!");
         }
         //返回身份认证信息
@@ -110,15 +115,24 @@ public class ShiroRealm extends AuthorizingRealm {
      * @return boolean
      */
     public boolean jwtTokenRefresh(String token, String userName, String passWord) {
-        String redisToken = (String) redisTemplate.opsForValue().get(token);
-        if (redisToken != null) {
-            if (!JwtUtil.verify(redisToken, userName, passWord)) {
+        if (token != null) {
+            if (!JwtUtil.verify(token, userName, passWord)) {
                 String newToken = JwtUtil.sign(userName, passWord);
                 //设置redis缓存
-                redisTemplate.opsForValue().set(token, newToken, expireTime * 2 / 1000, TimeUnit.SECONDS);
+                redisTemplate.opsForValue().set("token", newToken, expireTime * 2 / 1000, TimeUnit.SECONDS);
             }
             return true;
         }
         return false;
+//        String redisToken = redisTemplate.opsForValue().get(token);
+//        if (redisToken != null) {
+//            if (!JwtUtil.verify(redisToken, userName, passWord)) {
+//                String newToken = JwtUtil.sign(userName, passWord);
+//                //设置redis缓存
+//                redisTemplate.opsForValue().set(token, newToken, expireTime * 2 / 1000, TimeUnit.SECONDS);
+//            }
+//            return true;
+//        }
+//        return false;
     }
 }

@@ -1,11 +1,13 @@
 package com.tkj.wechat.configuration;
 import com.alibaba.fastjson.JSONObject;
 import com.tkj.wechat.util.ApiReturnUtil;
+import com.tkj.wechat.util.SpringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.Filter;
@@ -14,6 +16,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 
 /**
@@ -23,8 +26,6 @@ import java.io.IOException;
 @Slf4j
 public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
 
-    @Autowired
-    private RedisTemplate redisTemplate;
     /**
      * 执行登录
      *
@@ -36,7 +37,16 @@ public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws IOException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String token =redisTemplate.opsForValue().get("token").toString();
+        //从请求头中获取token
+        final String reqToken = httpServletRequest.getHeader("token");
+        StringRedisTemplate redisTemplate = SpringUtils.getBean(StringRedisTemplate.class);
+        //从redis中获取token
+        String token =redisTemplate.opsForValue().get("token");
+        //比较两个token是否一致
+        boolean equals = Objects.equals(reqToken, token);
+        if (!equals) {
+            return false;
+        }
         JwtToken jwtToken = new JwtToken(token);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         try {
@@ -44,6 +54,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
             // 如果没有抛出异常则代表登入成功，返回true
             return true;
         } catch (AuthenticationException e) {
+            e.printStackTrace();
             return false;
         }
 
