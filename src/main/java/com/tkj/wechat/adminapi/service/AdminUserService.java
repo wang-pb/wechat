@@ -48,5 +48,12 @@ public class AdminUserService {
 
     }
 
-
+    /**
+     * 根据用户名获取userid
+     * @param username
+     * @return
+     */
+    public Integer getUseridByUsername(String username) {
+        return administratorMapper.selectIdByUsername(username);
+    }
 }

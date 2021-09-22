@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -37,14 +39,16 @@ public class UploadFile {
     private String zipUrl;
 
     @RequestMapping("/img")
-    public String imgUpload(@RequestParam MultipartFile file){
+    public Map<String, String> imgUpload(@RequestParam MultipartFile file){
         String oldName = file.getOriginalFilename();
         String imgType = oldName.substring(oldName.lastIndexOf("."), oldName.length());
         String name = UUID.randomUUID().toString()+imgType; // 图片名
         String realpath = uploadPath + "/" + name;
         String fileName = writeUploadFile(file, realpath, name);
         String url = uploadUrl + fileName;
-        return url;
+        Map<String, String> result = new HashMap<>();
+        result.put("url", url);
+        return result;
     }
 
     public static String writeUploadFile(MultipartFile file, String realpath, String fileName) {

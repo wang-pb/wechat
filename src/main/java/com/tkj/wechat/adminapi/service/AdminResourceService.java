@@ -71,6 +71,7 @@ public class AdminResourceService {
 
 
     public Resource updateCarousel(Resource resource) {
+        resource.setType(StatusCode.RESOURCE_TYPE_CAROUSEL);
         resourceMapper.updateByPrimaryKeySelective(resource);
         return resource;
     }

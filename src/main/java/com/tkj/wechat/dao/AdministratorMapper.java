@@ -149,4 +149,11 @@ public interface AdministratorMapper {
      * @mbg.generated
      */
     int logicalDeleteByPrimaryKey(Integer id);
+
+    /**
+     * 根据username获取用户id
+     * @param username
+     * @return
+     */
+    Integer selectIdByUsername(String username);
 }

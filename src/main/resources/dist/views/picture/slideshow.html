@@ -158,6 +158,7 @@
                     $.ajax({
                         url: '/admin_display/del_carousel/' + data.id,
                         method: 'delete',
+                        headers: {token: localStorage.getItem('token')},
                         dataType: 'json',
                         success: function (resp) {
                             obj.del();

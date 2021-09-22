@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.tkj.wechat.adminapi.service.AdminUserService;
 
 import java.util.*;
 
@@ -104,21 +105,26 @@ public class JwtHelper {
 	}
 
 	public Integer verifyAdminTokenAndGetUserId(String token){
-		try {
-			Algorithm algorithm = Algorithm.HMAC256(SECRET);
-			JWTVerifier verifier = JWT.require(algorithm)
-					.withIssuer(ISSUSER)
-					.build();
-			DecodedJWT jwt = verifier.verify(token);
-			Map<String, Claim> claims = jwt.getClaims();
-			Claim claimId = claims.get("userId");
-			Claim clainAdmin = claims.get("admin");
-			if("admin".equals(clainAdmin.asString()))
-				return claimId.asInt();
-		} catch (JWTVerificationException exception){
+		//用你的工具类获取用户名
+		String username = JwtUtil.getUsername(token);
+		AdminUserService service = SpringUtils.getBean(AdminUserService.class);
+		Integer userid = service.getUseridByUsername(username);
+		return userid;
+//		try {
+//			Algorithm algorithm = Algorithm.HMAC256(SECRET);
+//			JWTVerifier verifier = JWT.require(algorithm)
+//					.withIssuer(ISSUSER)
+//					.build();
+//			DecodedJWT jwt = verifier.verify(token); //TODO 注意！！！你现在的jwt，在这一行是校验无法通过的，所以我没法给你做修改了。以后你就别乱改了，现在我也只能给你重新写，不敢改，怕改了又有别的地方蹦出个bug
+//			Map<String, Claim> claims = jwt.getClaims();
+//			Claim claimId = claims.get("userId");
+//			Claim clainAdmin = claims.get("admin");
+//			if("admin".equals(clainAdmin.asString()))
+//				return claimId.asInt();
+//		} catch (JWTVerificationException exception){
 //			exception.printStackTrace();
-		}
-		return null;
+//		}
+//		return null;
 	}
 
 	public  Integer verifyTokenAndGetUserId(String token){

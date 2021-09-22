@@ -157,6 +157,7 @@
                         url: '/admin_display/del_carousel/' + data.id,
                         method: 'delete',
                         dataType: 'json',
+                        headers: {token: localStorage.getItem('token')},
                         success: function (resp) {
                             obj.del();
                             layer.close(index);
