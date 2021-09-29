@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PublicDisplayService {
+public class PublicDisplayService implements PictureService{
 
     @Autowired
     private ResourceMapper resourceMapper;
@@ -22,10 +22,16 @@ public class PublicDisplayService {
     @Autowired
     private ViewClassTypePosterMapper viewClassTypePosterMapper;
 
-    public List<Resource> getCourselList(){
-        ResourceExample example = new ResourceExample();
-        example.or().andLogicalDeleted(false).andTypeEqualTo(StatusCode.RESOURCE_TYPE_CAROUSEL).example().orderBy("sequence");
-        return resourceMapper.selectByExample(example);
+    public List<Picture> getCourselList(String type){
+        //ResourceExample example = new ResourceExample();
+        //example.or().andLogicalDeleted(false).andTypeEqualTo(StatusCode.RESOURCE_TYPE_CAROUSEL).example().orderBy("sequence");
+        //0为轮播图，1为教师海报
+        if ("1".equals(type)){
+            type = StatusCode.RESOURCE_TYPE_TEACHER_POSTER;
+        }else if ("0".equals(type)){
+            type = StatusCode.RESOURCE_TYPE_CAROUSEL;
+        }
+        return resourceMapper.selectResByType(type);
     }
 
     public List<ViewUserPoster> getAllTeacherPoster(){

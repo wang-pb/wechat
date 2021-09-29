@@ -43,8 +43,8 @@ public class UploadFile {
         String oldName = file.getOriginalFilename();
         String imgType = oldName.substring(oldName.lastIndexOf("."), oldName.length());
         String name = UUID.randomUUID().toString()+imgType; // 图片名
-        String realpath = uploadPath + "/" + name;
-        String fileName = writeUploadFile(file, realpath, name);
+        //String realpath = uploadPath;
+        String fileName = writeUploadFile(file, uploadPath, name);
         String url = uploadUrl + fileName;
         Map<String, String> result = new HashMap<>();
         result.put("url", url);

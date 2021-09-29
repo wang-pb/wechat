@@ -21,6 +21,7 @@ public class StatusCode {
 
     public static final String RESOURCE_TYPE_AVATOR = "RESOURCE_TYPE_AVATOR";
 
+    //教师海报
     public static final String RESOURCE_TYPE_TEACHER_POSTER = "RESOURCE_TYPE_TEACHER_POSTER";
 
     public static final String RESOURCE_TYPE_STUDENT_POSTER = "RESOURCE_TYPE_STUDENT_POSTER";

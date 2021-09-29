@@ -75,7 +75,7 @@ class WechatApplicationTests {
 
     @Test
     void currentTest(){
-        System.out.println(publicDisplayService.getCourselList());
+        //System.out.println(publicDisplayService.getCourselList());
     }
 
     @Value(value = "${location.api-base-name}")
