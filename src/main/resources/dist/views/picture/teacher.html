@@ -185,7 +185,7 @@
                 form = layui.form,
                 table = layui.table;
             $.ajax({
-                url:'/public_display/get_carousel',
+                url:'/public_display/get_carousel?type=1',
                 method: 'get',
                 dataType: 'json',
                 headers: {token: localStorage.getItem('token')},

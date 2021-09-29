@@ -67,7 +67,6 @@
                 //预读本地文件示例，不支持ie8
                 obj.preview(function(index, file, result){
                     console.log('file', file)
-                    $('#fileName').val(file.name)
                     $('#demo1').attr('src', result); //图片链接（base64）
                 });
                 element.progress('demo', '0%'); //进度条复位
@@ -80,6 +79,7 @@
                     return layer.msg('上传失败');
                 }
                 $('#url').val(res.url)
+                $('#fileName').val(res.url)
                 // $('#fileName').val(res.fileName)
                 $('#demoText').html(''); //置空上传失败的状态
             }

@@ -47,7 +47,7 @@ public class UploadFile {
         String fileName = writeUploadFile(file, uploadPath, name);
         String url = uploadUrl + fileName;
         Map<String, String> result = new HashMap<>();
-        result.put("url", url);
+        result.put("url", name);
         return result;
     }
 

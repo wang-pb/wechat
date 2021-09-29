@@ -187,7 +187,7 @@
                 form = layui.form,
                 table = layui.table;
             $.ajax({
-                url:'/public_display/get_carousel',
+                url:'/public_display/get_carousel?type=0',//type=0表示轮播图
                 method: 'get',
                 contentType:'application/json;charset=UTF-8',
                 headers: {token: localStorage.getItem('token')},
