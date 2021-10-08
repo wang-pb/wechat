@@ -14,7 +14,8 @@
     layui.use('jquery', function () {
         let $ = layui.$
         let swiper = JSON.parse(localStorage.getItem('swiper'))
-        $('#swiper-img').attr('src', swiper.url)
+        console.log(window.location.host )
+        $('#swiper-img').attr('src', '/download_img?url=' + swiper.url)
     })
 </script>
 </html>

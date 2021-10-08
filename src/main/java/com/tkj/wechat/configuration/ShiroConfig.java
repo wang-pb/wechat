@@ -47,6 +47,7 @@ public class ShiroConfig {
         //设置拦截链map
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //放行请求
+        filterChainDefinitionMap.put("/download_img", "anon");
         filterChainDefinitionMap.put("/shiro/getToken", "anon");
         filterChainDefinitionMap.put("/admin/login/", "anon");
         filterChainDefinitionMap.put("/login.html", "anon");

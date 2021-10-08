@@ -56,7 +56,7 @@
         let $ = layui.$
         let swiper = JSON.parse(localStorage.getItem('swiper'))
         $('#id').val(swiper.id)
-        $('#demo1').attr('src', swiper.url)
+        $('#demo1').attr('src', '/download_img?url=' + swiper.url)
         $('#sequence').val(swiper.sequence)
         form.render()
         localStorage.removeItem('swiper')
