@@ -43,7 +43,7 @@ public class ShiroConfig {
         //设置组登录请求，其他路径一律自动跳转到这里
         shiroFilterFactoryBean.setLoginUrl("/login.html");
         //未授权跳转路径
-        shiroFilterFactoryBean.setUnauthorizedUrl("/notRole");
+//        shiroFilterFactoryBean.setUnauthorizedUrl("/notRole");
         //设置拦截链map
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //放行请求

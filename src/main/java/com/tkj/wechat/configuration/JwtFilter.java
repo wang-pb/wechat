@@ -88,12 +88,14 @@ public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        ApiReturnUtil result =null;
-        result.err(-1,"认证失败");
+        Object result = ApiReturnUtil.err(-1,"认证失败");
         Object parse = JSONObject.toJSON(result);
         response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json;charset=utf8");
         response.getWriter().print(parse);
-        return super.onAccessDenied(request, response);
+//        boolean denied = super.onAccessDenied(request, response);
+//        System.out.println(denied);
+        return false;
     }
 
     /**

@@ -51,6 +51,10 @@
             contentType:'application/json;charset=UTF-8',
             headers: {token: localStorage.getItem('token')},
             success: function (resp) {
+                if (resp.state == -1) {
+                    top.location.href = '/login.html'
+                    return
+                }
                 carouselList = resp.data
                 table.render({
                     elem: '#currentTableId',
